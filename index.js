@@ -77,10 +77,31 @@ const result = {
 
 const data = result.data;
 
-let dep_wise_month_wise = [], departments = [], dept_steps = [];
+let depwiseMonthwiseSteps = [], empwiseLeaderboard = [];
 let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct','Nov','Dec'];
+
 for(let i=0; i<data.length; i++) {
     let obj = data[i];
+    let department = obj.department;
+    
+    let date = obj.date;
+    let month = months[parseInt(date[5] + date[6])-1];
+    
+    let steps = obj.steps;
+
+    let newObj = {
+        department:department,
+        month: month,
+        steps: steps
+    }
+    let checkObj = depwiseMonthwiseSteps.find(e=>(e.department==newObj.department) && (e.month==newObj.month));
+    if(checkObj === undefined) {
+        depwiseMonthwiseSteps.push(newObj);
+    }
+    else {
+        checkObj.steps += steps;
+    }
+    /*let obj = data[i];
     let department = obj['department'];
     if(departments.indexOf(department) === -1) {
         departments.push(department);
@@ -95,9 +116,9 @@ for(let i=0; i<data.length; i++) {
         "department": department,
         "month": month
     }
-    dep_wise_month_wise.push(dep_month_obj);
+    dep_wise_month_wise.push(dep_month_obj);*/
 
 
 }
 
-console.log(dep_wise_month_wise);
+depwiseMonthwiseSteps = depwiseMonthwiseSteps.sort((a,b)=>a.department>b.department? 1:-1);
