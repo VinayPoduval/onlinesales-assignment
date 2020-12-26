@@ -41,3 +41,30 @@ depwiseMonthwiseSteps = depwiseMonthwiseSteps.sort((a,b)=>a.department>b.departm
 empwiseLeaderboard = empwiseLeaderboard.sort((a,b)=>(a.month>b.month?-1:(a.month<b.month?1:(a.steps-b.steps))));
 console.log(depwiseMonthwiseSteps);
 console.log(empwiseLeaderboard);
+
+let fields1 = ['Department', 'Month', 'Steps'].join('\t');
+let fields2 = ['Name', 'Month', 'Steps'].join('\t');
+
+const fs = require('fs');
+
+fs.appendFile('DeptWise.tsv', fields1, function(err) {
+    if(err) throw err;
+});
+for(let i=0; i<depwiseMonthwiseSteps.length; i++) {
+    let obj = depwiseMonthwiseSteps[i];
+    let newLine = "\n" + obj.department + "\t" + obj.month + "\t" + obj.steps;
+    fs.appendFile('DeptWise.tsv', newLine, function(err) {
+        if (err) throw err;
+    })
+}
+
+fs.appendFile('EmpWise.tsv', fields2, function(err) {
+    if(err) throw err;
+});
+for(let i=0; i<empwiseLeaderboard.length; i++) {
+    let obj = empwiseLeaderboard[i];
+    let newLine = "\n" + obj.name + "\t" + obj.month + "\t" + obj.steps;
+    fs.appendFile('EmpWise.tsv', newLine, function(err) {
+        if (err) throw err;
+    })
+}
