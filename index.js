@@ -1,124 +1,43 @@
-const result = {
-    "data": [
-        {
-            "user": "Ezra Miller",
-            "date": "2020-11-01",
-            "steps": 9999,
-            "department": "Information Technology"
-        },
-        {
-            "user": "Ezra Miller",
-            "date": "2020-11-02",
-            "steps": 15000,
-            "department": "Information Technology"
-        },
-        {
-            "user": "Bruce Banner",
-            "date": "2020-12-02",
-            "steps": 1000,
-            "department": "Management"
-        },
-        {
-            "user": "Thanos",
-            "date": "2020-12-05",
-            "steps": 4523,
-            "department": "Human Resources"
-        },
-        {
-            "user": "Bruce Banner",
-            "date": "2020-12-03",
-            "steps": 2000,
-            "department": "Management"
-        },
-        {
-            "user": "Tony Stark",
-            "date": "2020-10-03",
-            "steps": 2233,
-            "department": "Research and Development"
-        },
-        {
-            "user": "Thanos",
-            "date": "2020-12-05",
-            "steps": 6000,
-            "department": "Human Resources"
-        },
-        {
-            "user": "Ezra Miller",
-            "date": "2020-11-02",
-            "steps": 4000,
-            "department": "Information Technology"
-        },
-        {
-            "user": "Bruce Banner",
-            "date": "2020-10-04",
-            "steps": 2345,
-            "department": "Research and Development"
-        },
-        {
-            "user": "Scarlet Witch",
-            "date": "2020-11-13",
-            "steps": 1000,
-            "department": "DevOps"
-        },
-        {
-            "user": "Tony Stark",
-            "date": "2020-11-13",
-            "steps": 4033,
-            "department": "Research and Development"
-        },
-        {
-            "user": "Tony Stark",
-            "date": "2020-10-04",
-            "steps": 5033,
-            "department": "Research and Development"
-        }
-    ]
-}
-
-const data = result.data;
+const json = require('./company_data.json');
+const data = json.data;
 
 let depwiseMonthwiseSteps = [], empwiseLeaderboard = [];
 let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct','Nov','Dec'];
 
 for(let i=0; i<data.length; i++) {
     let obj = data[i];
-    let department = obj.department;
     
     let date = obj.date;
     let month = months[parseInt(date[5] + date[6])-1];
     
-    let steps = obj.steps;
-
-    let newObj = {
-        department:department,
+    let depWise = {
+        department:obj.department,
         month: month,
-        steps: steps
+        steps: obj.steps
     }
-    let checkObj = depwiseMonthwiseSteps.find(e=>(e.department==newObj.department) && (e.month==newObj.month));
-    if(checkObj === undefined) {
-        depwiseMonthwiseSteps.push(newObj);
+    let checkDepWise = depwiseMonthwiseSteps.find(e=>(e.department==depWise.department) && (e.month==depWise.month));
+    if(checkDepWise === undefined) {
+        depwiseMonthwiseSteps.push(depWise);
     }
     else {
-        checkObj.steps += steps;
+        checkDepWise.steps += obj.steps;
     }
-    /*let obj = data[i];
-    let department = obj['department'];
-    if(departments.indexOf(department) === -1) {
-        departments.push(department);
+
+    let empWise = {
+        name: obj.user,
+        month: month,
+        steps: obj.steps
     }
-    
-    let date = obj['date'];
-    let month = months[(parseInt(date[5] + date[6]))-1];
-
-    let steps = obj['steps']; 
-
-    let dep_month_obj = {
-        "department": department,
-        "month": month
+    let checkEmpWise = empwiseLeaderboard.find(e=>(e.name==empWise.name) && (e.month==empWise.month));
+    if(checkEmpWise === undefined) {
+        empwiseLeaderboard.push(empWise);
     }
-    dep_wise_month_wise.push(dep_month_obj);*/
-
-
+    else {
+        checkEmpWise.steps += obj.steps;
+    }
 }
 
 depwiseMonthwiseSteps = depwiseMonthwiseSteps.sort((a,b)=>a.department>b.department? 1:-1);
+empwiseLeaderboard = empwiseLeaderboard.sort((a,b)=>(a.month>b.month?-1:(a.month<b.month?1:(a.steps-b.steps))));
+console.log(depwiseMonthwiseSteps);
+console.log(empwiseLeaderboard);
